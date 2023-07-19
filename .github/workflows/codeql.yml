@@ -20,6 +20,9 @@ on:
   schedule:
     - cron: '43 2 * * 3'
 
+env:
+  CODEQL_EXTRACTOR_JAVA_RUN_ANNOTATION_PROCESSORS: true
+
 jobs:
   analyze:
     name: Analyze
