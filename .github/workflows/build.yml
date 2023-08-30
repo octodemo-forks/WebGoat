@@ -34,6 +34,7 @@ jobs:
                     context: ./
                     file: ./Dockerfile
                     push: false
+                    tags: localbuild/testimage:latest
                     build-args: |
                         webgoat_version=${{ env.WEBGOAT_MAVEN_VERSION }}
             -   name: "Verify Docker WebGoat desktop build"
@@ -43,5 +44,11 @@ jobs:
                     context: ./
                     file: ./Dockerfile_desktop
                     push: false
+                    tags: localbuild/testimage:latest
                     build-args: |
                         webgoat_version=${{ env.WEBGOAT_MAVEN_VERSION }} 
+            -   name: Scan image
+                uses: anchore/scan-action@v3
+                if: runner.os == 'Linux'
+                with:
+                  image: "localbuild/testimage:latest"
