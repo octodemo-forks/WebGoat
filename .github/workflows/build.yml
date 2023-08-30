@@ -52,12 +52,14 @@ jobs:
             -   name: Scan image Desktop
                 uses: anchore/scan-action@v3
                 if: runner.os == 'Linux'
+                id: scandesktop
                 with:
                   image: "localbuild/testimagedesktop:latest"
                   fail-build: false
             -   name: Scan image
                 uses: anchore/scan-action@v3
                 if: runner.os == 'Linux'
+                id: scan
                 with:
                   image: "localbuild/testimage:latest"
                   fail-build: false
@@ -65,3 +67,7 @@ jobs:
                 uses: github/codeql-action/upload-sarif@v2
                 with:
                   sarif_file: ${{ steps.scan.outputs.sarif }}
+            -   name: upload Anchore scan SARIF report Desktop
+                uses: github/codeql-action/upload-sarif@v2
+                with:
+                  sarif_file: ${{ steps.scandesktop.outputs.sarif }}
