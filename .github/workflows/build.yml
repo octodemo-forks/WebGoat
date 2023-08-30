@@ -31,22 +31,30 @@ jobs:
                 if: runner.os == 'Linux'
                 uses: docker/build-push-action@v4.1.1
                 with:
+                    tags: localbuild/testimage:latest
+                    push: false
+                    load: true
                     context: ./
                     file: ./Dockerfile
-                    push: false
-                    tags: localbuild/testimage:latest
                     build-args: |
                         webgoat_version=${{ env.WEBGOAT_MAVEN_VERSION }}
             -   name: "Verify Docker WebGoat desktop build"
                 uses: docker/build-push-action@v4.1.1
                 if: runner.os == 'Linux'
                 with:
+                    tags: localbuild/testimagedesktop:latest
+                    push: false
+                    load: true
                     context: ./
                     file: ./Dockerfile_desktop
-                    push: false
-                    tags: localbuild/testimage:latest
                     build-args: |
                         webgoat_version=${{ env.WEBGOAT_MAVEN_VERSION }} 
+            -   name: Scan image Desktop
+                uses: anchore/scan-action@v3
+                if: runner.os == 'Linux'
+                with:
+                  image: "localbuild/testimagedesktop:latest"
+                  fail-build: false
             -   name: Scan image
                 uses: anchore/scan-action@v3
                 if: runner.os == 'Linux'
