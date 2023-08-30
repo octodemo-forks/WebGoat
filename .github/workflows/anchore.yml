@@ -1,9 +1,9 @@
-name: "Pull requests build"
+name: "anchore"
 on:
     workflow_dispatch:
 
 jobs:
-    pr-build:
+    anchore:
         runs-on: ubuntu-latest
         steps:
             -   uses: actions/checkout@v3
