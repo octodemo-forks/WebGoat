@@ -1,9 +1,9 @@
-name: "Pull requests build"
+name: "trivy"
 on:
     workflow_dispatch:
 
 jobs:
-    pr-build:
+    trivy:
         runs-on: ubuntu-latest
         steps:
             -   uses: actions/checkout@v3
