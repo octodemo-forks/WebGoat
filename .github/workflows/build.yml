@@ -7,26 +7,32 @@ jobs:
         runs-on: ubuntu-latest
         steps:
             -   uses: actions/checkout@v3
+            
             -   name: Set up JDK 17
                 uses: actions/setup-java@v3
                 with:
                     distribution: 'temurin'
                     java-version: 17
                     architecture: x64
+                    
             -   name: Cache Maven packages
                 uses: actions/cache@v3.3.1
                 with:
                     path: ~/.m2
                     key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
                     restore-keys: ${{ runner.os }}-m2-
+                    
             -   name: Build with Maven
                 run: mvn --no-transfer-progress verify
+                
             -   name: "Set up QEMU"
                 if: runner.os == 'Linux'
                 uses: docker/setup-qemu-action@v2.2.0
+                
             -   name: "Set up Docker Buildx"
                 if: runner.os == 'Linux'
                 uses: docker/setup-buildx-action@v2
+                
             -   name: "Verify Docker WebGoat build"
                 if: runner.os == 'Linux'
                 uses: docker/build-push-action@v4.1.1
@@ -38,24 +44,7 @@ jobs:
                     file: ./Dockerfile
                     build-args: |
                         webgoat_version=${{ env.WEBGOAT_MAVEN_VERSION }}
-            -   name: "Verify Docker WebGoat desktop build"
-                uses: docker/build-push-action@v4.1.1
-                if: runner.os == 'Linux'
-                with:
-                    tags: localbuild/testimagedesktop:latest
-                    push: false
-                    load: true
-                    context: ./
-                    file: ./Dockerfile_desktop
-                    build-args: |
-                        webgoat_version=${{ env.WEBGOAT_MAVEN_VERSION }} 
-            -   name: Scan image Desktop
-                uses: anchore/scan-action@v3
-                if: runner.os == 'Linux'
-                id: scandesktop
-                with:
-                  image: "localbuild/testimagedesktop:latest"
-                  fail-build: false
+
             -   name: Scan image
                 uses: anchore/scan-action@v3
                 if: runner.os == 'Linux'
@@ -63,11 +52,8 @@ jobs:
                 with:
                   image: "localbuild/testimage:latest"
                   fail-build: false
+                  
             -   name: upload Anchore scan SARIF report
                 uses: github/codeql-action/upload-sarif@v2
                 with:
                   sarif_file: ${{ steps.scan.outputs.sarif }}
-            -   name: upload Anchore scan SARIF report Desktop
-                uses: github/codeql-action/upload-sarif@v2
-                with:
-                  sarif_file: ${{ steps.scandesktop.outputs.sarif }}
