@@ -1,6 +1,6 @@
 name: "Pull requests build"
 on:
-    repository_dispatch:
+    workflow_dispatch:
 
 jobs:
     pr-build:
