@@ -44,7 +44,6 @@ jobs:
                     load: true
                     context: ./
                     file: ./Dockerfile
-                    timeout: 20m0s
                     build-args: |
                         webgoat_version=${{ env.WEBGOAT_MAVEN_VERSION }}
 
@@ -54,6 +53,7 @@ jobs:
                 image-ref: 'localbuild/testimage:latest'
                 format: 'sarif'
                 output: 'trivy-results.sarif'
+                timeout: 20m0s
       
             - name: Upload Trivy scan results to GitHub Security tab
               uses: github/codeql-action/upload-sarif@v2
