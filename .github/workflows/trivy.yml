@@ -44,6 +44,7 @@ jobs:
                     load: true
                     context: ./
                     file: ./Dockerfile
+                    timeout: 20m0s
                     build-args: |
                         webgoat_version=${{ env.WEBGOAT_MAVEN_VERSION }}
 
