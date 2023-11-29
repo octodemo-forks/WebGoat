@@ -37,7 +37,8 @@ jobs:
             - '**/*.test.js'
           queries:
             - uses: security-and-quality
-
+            
+    # Autobuild does not handle Maven as good as gradle, need to specify JDK to use (11 is default on runner images)
     #- if: matrix.language == 'java'  
     #  name: Set up java 17
     #  uses: actions/setup-java@v3
