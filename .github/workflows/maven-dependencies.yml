@@ -1,0 +1,15 @@
+name: "Dependnecy Submission API Upload"
+
+on:
+  push:
+    branches: [ "main" ]
+
+jobs:
+  depSubmissionAPIUpload:
+    name: Analyze
+    runs-on: 'ubuntu-latest'
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v3
+    - name: Submit Dependency Snapshot
+      uses: advanced-security/maven-dependency-submission-action@v3
